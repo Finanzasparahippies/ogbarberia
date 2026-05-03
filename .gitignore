@@ -1,0 +1,28 @@
+# Secrets & Data
+.env
+.env.prod
+.env.local
+*.sql
+*.json
+*.dump
+backup_completo.sql
+backup_local.json
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Build files
+dist/
+build/
+.next/
+out/

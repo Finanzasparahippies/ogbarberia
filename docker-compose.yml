@@ -1,0 +1,61 @@
+services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=ogbarberia
+      - POSTGRES_USER=oguser
+      - POSTGRES_PASSWORD=ogpassword
+    networks:
+      - og_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app:z
+      - django_static:/app/static
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+    networks:
+      - og_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app:z
+      - /app/node_modules
+      - /app/.next
+    env_file:
+      - ./frontend/.env.local
+    depends_on:
+      - backend
+    networks:
+      - og_network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:z
+      - django_static:/app/static:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - og_network
+
+networks:
+  og_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  django_static:
