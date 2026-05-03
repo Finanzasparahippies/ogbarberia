@@ -34,6 +34,7 @@ DEBUG = env('DEBUG', default=True)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=['http://localhost:3000'])
 
 # Application definition
 
@@ -157,7 +158,8 @@ CLOUDINARY_STORAGE = {
 AUTH_USER_MODEL = 'users.User'
 
 # CORS
-CORS_ALLOW_ALL_ORIGINS = True # Change in production
+# CORS_ALLOW_ALL_ORIGINS = True # Change in production
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=['http://localhost:3000'])
 
 # REST Framework
 REST_FRAMEWORK = {
