@@ -34,6 +34,19 @@ DEBUG = env('DEBUG', default=True)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
+# 1. Configuración de Proxy para SSL (VITAL)
+# Esto le dice a Django que confíe en la cabecera 'X-Forwarded-Proto' que enviamos desde Nginx
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# 2. Seguridad de Cookies en Producción
+# Solo activa esto si DEBUG es False (para no romper el desarrollo local)
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True # Opcional: fuerza redirección a nivel Django
+    USE_X_FORWARDED_HOST = True
+    USE_X_FORWARDED_PORT = True
+    
 CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=['http://localhost:3000'])
 
 # Application definition
